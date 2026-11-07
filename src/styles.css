@@ -1,0 +1,687 @@
+/*
+ * Design system for older users — every rule here traces back to docs/ux-guidelines.md.
+ * Sizes are in rem so the Text size setting (and the browser's own zoom) scales everything.
+ */
+
+/* ─── Design tokens ────────────────────────────────────────────────────── */
+:root {
+  /* Colour: warm, calm, high contrast. Body text ≥ 7:1 (WCAG AAA) on --bg and --surface. */
+  --bg: #fbf8f3;
+  --surface: #ffffff;
+  --surface-2: #f3eee6;
+  --ink: #1b1f24; /* ~16:1 */
+  --ink-2: #3b4350; /* ~9.5:1 — secondary text, still AAA */
+  --line: #d9d2c5; /* borders: visible, not faint */
+  --primary: #1b4f78; /* white text on it ≥ 7:1 */
+  --primary-ink: #ffffff;
+  --primary-soft: #e4eef6;
+  --warm: #723d00; /* text on --warm-soft ≥ 7:1 */
+  --warm-soft: #fdf0dc;
+  --accent: #f2b33d; /* decoration only, never text */
+  --danger: #921c16; /* white text on it ≥ 7:1 */
+  --danger-soft: #fbe9e7;
+  --focus: #f2b33d;
+
+  /* Size: 18px body, generous line height, big targets. */
+  --text: 1rem; /* = 18px at "normal" (see html below) */
+  --text-sm: 0.9rem; /* never below ~16px */
+  --text-lg: 1.2rem;
+  --h1: 1.65rem;
+  --h2: 1.3rem;
+  --target: 3.25rem; /* ~58px — primary buttons, tabs */
+  --target-min: 2.75rem; /* ~50px — smallest tappable thing */
+  --gap: 0.75rem; /* ≥ 8px between tappable things */
+
+  --radius: 18px;
+  --radius-sm: 12px;
+  --shadow: 0 1px 2px rgba(27, 31, 36, 0.06), 0 6px 18px rgba(27, 31, 36, 0.07);
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --font: "Atkinson Hyperlegible Next Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Text size setting (src/lib/settings.ts) scales the root: 18px → 21px → 24px. */
+html {
+  font-size: 112.5%;
+  -webkit-text-size-adjust: 100%;
+}
+html[data-text-size="large"] {
+  font-size: 131.25%;
+}
+html[data-text-size="xlarge"] {
+  font-size: 150%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: var(--text);
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--bg);
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+h1 {
+  font-size: var(--h1);
+}
+h2 {
+  font-size: var(--h2);
+}
+p {
+  margin: 0 0 0.6em;
+}
+p:last-child {
+  margin-bottom: 0;
+}
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+button {
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+/* A thick, obvious focus ring for keyboard and switch users. */
+:focus-visible {
+  outline: 4px solid var(--focus);
+  outline-offset: 2px;
+}
+.muted {
+  color: var(--ink-2);
+  font-weight: 400;
+}
+
+/* Respect "reduce motion". */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── App shell: a phone-width column, centred on bigger screens ─────────── */
+#root {
+  display: flex;
+  justify-content: center;
+}
+.shell {
+  width: 100%;
+  max-width: 480px;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+@media (min-width: 520px) {
+  /* On a laptop, show the app as a "phone" so demos look like the real thing. */
+  body {
+    background: #e9e3d8;
+  }
+  .shell {
+    margin: 24px 0;
+    min-height: calc(100dvh - 48px);
+    border-radius: 32px;
+    box-shadow: 0 30px 60px -20px rgba(27, 31, 36, 0.35);
+    overflow: hidden;
+  }
+}
+
+.demo-banner {
+  background: var(--surface-2);
+  color: var(--ink-2);
+  font-size: var(--text-sm);
+  text-align: center;
+  padding: 4px 16px;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap);
+  padding: 10px 16px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  font-weight: 700;
+  font-size: var(--text-lg);
+  color: var(--primary);
+}
+.back-btn,
+.help-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: var(--target-min);
+  padding: 0 14px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+.back-btn {
+  border: 2px solid var(--line);
+  background: var(--surface);
+  padding-left: 6px;
+}
+.help-btn {
+  border: 2px solid var(--danger);
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.screen {
+  flex: 1;
+  padding: 20px 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: fade-in 0.3s var(--ease);
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* Bottom tab bar: icon + label, big targets, current tab unmistakable. */
+.tabbar {
+  position: sticky;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  padding: 6px 6px calc(6px + env(safe-area-inset-bottom));
+}
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-height: calc(var(--target) + 8px);
+  border: none;
+  background: none;
+  border-radius: var(--radius-sm);
+  color: var(--ink-2);
+  /* Labels stay on one line even at the biggest text size on a small phone (still ≥ 16px at 320px wide). */
+  font-size: min(var(--text-sm), 5.2vw);
+  white-space: nowrap;
+  font-weight: 600;
+}
+.tab.active {
+  color: var(--primary);
+  background: var(--primary-soft);
+  font-weight: 700;
+}
+.tab-help {
+  color: var(--danger);
+}
+.tab-help.active {
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+
+/* ─── Building blocks ──────────────────────────────────────────────────── */
+.screen-title {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.lead {
+  font-size: var(--text-lg);
+  color: var(--ink-2);
+}
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+
+.action-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: calc(var(--target) + 20px);
+  padding: 14px 16px;
+  text-align: left;
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: transform 0.15s var(--ease);
+}
+.action-card:active {
+  transform: scale(0.98);
+}
+.action-card.primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-ink);
+}
+.action-card.warm {
+  background: var(--warm-soft);
+  border-color: #ecd2a8;
+  color: var(--warm);
+}
+.action-icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 14px;
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+.action-card.primary .action-icon {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+.action-card.warm .action-icon {
+  background: #fbe2bb;
+  color: var(--warm);
+}
+.action-text {
+  display: flex;
+  flex-direction: column;
+}
+.action-text strong {
+  font-size: var(--text-lg);
+}
+.action-text span {
+  color: inherit;
+  opacity: 0.9;
+}
+
+.segmented {
+  display: flex;
+  gap: var(--gap);
+}
+.segmented button {
+  flex: 1;
+  min-height: var(--target);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-weight: 700;
+  font-size: var(--text-lg);
+}
+.segmented button.active {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--primary-ink);
+}
+.preview-text {
+  padding: 16px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  border: 2px solid var(--line);
+}
+
+.todo {
+  padding: 14px 16px;
+  border: 2px dashed #c9b994;
+  border-radius: var(--radius);
+  background: #fffaf0;
+  color: var(--ink-2);
+  font-size: var(--text-sm);
+}
+.todo ul {
+  list-style: disc;
+  padding-left: 1.2em;
+  margin-top: 6px;
+}
+
+/* ─── Profile & family ─────────────────────────────────────────────────── */
+.need-list,
+.family-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+}
+.need,
+.family-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+}
+.need > span:last-child,
+.family-card > div {
+  display: flex;
+  flex-direction: column;
+}
+.avatar {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--accent);
+  font-weight: 700;
+  font-size: var(--text-lg);
+}
+
+/* ─── Trip timeline ────────────────────────────────────────────────────── */
+.day {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.timeline-item {
+  display: grid;
+  grid-template-columns: 3.6rem 1fr;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-left: 6px solid var(--primary);
+  border-radius: var(--radius-sm);
+}
+.timeline-item.rest {
+  border-left-color: #6b8f71;
+}
+.timeline-item.medication {
+  border-left-color: var(--accent);
+}
+.time {
+  font-weight: 700;
+}
+.access-note {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+  margin-top: 6px;
+  color: var(--ink-2);
+}
+.access-note svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--primary);
+}
+
+/* ─── Today ────────────────────────────────────────────────────────────── */
+.next-card {
+  padding: 18px;
+  background: var(--surface);
+  border: 2px solid var(--primary);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary);
+  font-weight: 700;
+}
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.steps li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.step-num {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-weight: 700;
+}
+
+/* ─── Help ─────────────────────────────────────────────────────────────── */
+.emergency {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: calc(var(--target) + 8px);
+  border: none;
+  border-radius: var(--radius);
+  background: var(--danger);
+  color: #fff;
+  font-weight: 700;
+  font-size: var(--text-lg);
+}
+
+/* ─── Chat ─────────────────────────────────────────────────────────────── */
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+.chat-log {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.bubble-row {
+  display: flex;
+}
+.bubble-row.me {
+  justify-content: flex-end;
+}
+.bubble {
+  max-width: 88%;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  font-size: var(--text-lg);
+  line-height: 1.45;
+}
+.bubble.assistant {
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-bottom-left-radius: 6px;
+}
+.bubble.me {
+  background: var(--primary);
+  color: var(--primary-ink);
+  border-bottom-right-radius: 6px;
+}
+.read-aloud {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  min-height: var(--target-min);
+  padding: 0 12px;
+  margin-left: -12px;
+  border: none;
+  border-radius: 999px;
+  background: none;
+  color: var(--primary);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+.typing {
+  display: inline-flex;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 16px 18px;
+}
+.typing span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--ink-2);
+  animation: blink 1.2s infinite ease-in-out;
+}
+.typing span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.typing span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+@keyframes blink {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+.chat-card {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--primary-soft);
+  font-size: var(--text);
+}
+.chat-card-head {
+  display: flex;
+  flex-direction: column-reverse; /* badge above the title, so the title never gets squeezed */
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.chat-card ul {
+  list-style: disc;
+  padding-left: 1.2em;
+}
+.badge {
+  flex-shrink: 0;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--accent);
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+/* Replies: full-width, big, stacked — tap, don't type. */
+.replies {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  margin-top: 4px;
+}
+.reply {
+  min-height: var(--target);
+  padding: 10px 18px;
+  border: 2px solid var(--primary);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--primary);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  text-align: left;
+}
+.reply:active {
+  background: var(--primary-soft);
+}
+.composer {
+  position: sticky;
+  bottom: calc(var(--target) + 22px + env(safe-area-inset-bottom));
+  display: flex;
+  gap: 8px;
+  padding: 10px 0 2px;
+  background: var(--bg);
+}
+.composer input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--target);
+  padding: 0 16px;
+  border: 2px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+}
+.composer input::placeholder {
+  color: var(--ink-2);
+}
+.icon-btn {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: var(--target);
+  height: var(--target);
+  border: 2px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--primary);
+}
+.icon-btn.primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+.icon-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* ─── Presenter demo index ─────────────────────────────────────────────── */
+.demo-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  counter-reset: flow;
+}
+.demo-list button {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding: 12px 16px;
+  min-height: var(--target);
+  background: var(--surface);
+  border: 2px solid var(--line);
+  border-radius: var(--radius-sm);
+}
+.demo-list span {
+  color: var(--ink-2);
+}
