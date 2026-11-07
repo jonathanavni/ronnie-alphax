@@ -2,6 +2,8 @@
 
 A school project by Ronnie: a prototype app that helps older travellers **plan trips around their personal needs** and **get help during the trip**, with an AI travel assistant and family support.
 
+**Try it:** https://jonathanavni.github.io/ronnie-alphax/ (best on a phone · all flows: [`#/demo`](https://jonathanavni.github.io/ronnie-alphax/#/demo))
+
 > This is a clickable prototype for gathering feedback. Nothing is booked and all data is sample data.
 
 ## Run it
@@ -31,6 +33,10 @@ npm run preview   # serve the built version
 - [`PLAN.md`](PLAN.md): the plan, milestones and decisions
 - [`docs/ux-guidelines.md`](docs/ux-guidelines.md): how to design for older users (research + checklist)
 - [`docs/feedback-sessions.md`](docs/feedback-sessions.md): how to run feedback sessions
+
+## Deploy
+
+Every push to `main` builds and publishes to GitHub Pages (`.github/workflows/deploy.yml`).
 
 ## Stack
 

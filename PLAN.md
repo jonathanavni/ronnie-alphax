@@ -6,7 +6,9 @@
 
 **Scaffolding done.** The app runs (`npm run dev`) as a phone-width web app. It has the design system for older users (big text, high contrast, big buttons, a text size setting), a bottom tab bar with labels, Back and Help on every screen, a working scripted chat (reply buttons, typing, read-aloud), and first versions of every screen with sample data. Unfinished screens show a yellow dashed **"To build"** box listing what's left.
 
-**Next up:** Milestone 1 below.
+**Live:** https://jonathanavni.github.io/ronnie-alphax/ (auto-deploys on push to `main`). Shared with Ronnie for her review.
+
+**Next up:** collect Ronnie's improvement list, then Milestone 1 below.
 
 ## 1. Goal of the prototype
 
