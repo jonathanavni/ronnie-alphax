@@ -5,13 +5,13 @@ import { useSyncExternalStore } from "react";
  * which scales the root font size — every size in styles.css is in rem, so everything grows.
  */
 export type TextSize = "normal" | "large" | "xlarge";
-export const TEXT_SIZES: { value: TextSize; label: string }[] = [
-  { value: "normal", label: "A" },
-  { value: "large", label: "A+" },
-  { value: "xlarge", label: "A++" },
+export const TEXT_SIZES: { value: TextSize; label: string; px: number }[] = [
+  { value: "normal", label: "Normal", px: 18 },
+  { value: "large", label: "Large", px: 21 },
+  { value: "xlarge", label: "Largest", px: 24 },
 ];
 
-const KEY = "wayfinder.textSize";
+const KEY = "northstar.textSize";
 const listeners = new Set<() => void>();
 
 function read(): TextSize {

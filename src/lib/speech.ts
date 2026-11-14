@@ -4,12 +4,15 @@
  */
 export const canSpeak = typeof window !== "undefined" && "speechSynthesis" in window;
 
-export function speak(text: string, onEnd?: () => void) {
+/** `lang` is optional, e.g. "pt-PT" to read the hotel address to a taxi driver in Portuguese. */
+export function speak(text: string, onEnd?: () => void, lang?: string) {
   if (!canSpeak) return;
   window.speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
   u.rate = 0.9;
+  if (lang) u.lang = lang;
   u.onend = () => onEnd?.();
+  u.onerror = () => onEnd?.();
   window.speechSynthesis.speak(u);
 }
 

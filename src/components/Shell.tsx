@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { ChevronLeft, House, LifeBuoy, Luggage, MessageCircle } from "lucide-react";
-import { navigate, type Page } from "../lib/router";
+import { goBack, navigate, type Page } from "../lib/router";
 import { APP_NAME, T } from "../data/strings";
 
 /**
@@ -16,11 +16,21 @@ const TABS: { page: Page; label: string; icon: typeof House }[] = [
 ];
 
 /** Which tab is "current" for screens that aren't tabs themselves. */
-const TAB_FOR: Partial<Record<Page, Page>> = { today: "trip", family: "trip", profile: "home", settings: "home" };
+const TAB_FOR: Partial<Record<Page, Page>> = {
+  today: "trip",
+  assistant: "trip",
+  translate: "trip",
+  family: "trip",
+  call: "help",
+  driver: "help",
+  profile: "home",
+  settings: "home",
+};
 
 export function Shell({ page, children }: { page: Page; children: ReactNode }) {
   const current = TAB_FOR[page] ?? page;
   const isTab = TABS.some((t) => t.page === page);
+  const inHelp = current === "help";
 
   return (
     <div className="shell">
@@ -29,12 +39,12 @@ export function Shell({ page, children }: { page: Page; children: ReactNode }) {
         {isTab ? (
           <span className="brand">{APP_NAME}</span>
         ) : (
-          <button type="button" className="back-btn" onClick={() => history.back()}>
+          <button type="button" className="back-btn" onClick={() => goBack(TAB_FOR[page])}>
             <ChevronLeft aria-hidden size={28} />
             {T.back}
           </button>
         )}
-        {page !== "help" && (
+        {!inHelp && (
           <button type="button" className="help-btn" onClick={() => navigate("help")}>
             <LifeBuoy aria-hidden size={24} />
             {T.helpButton}
@@ -42,9 +52,7 @@ export function Shell({ page, children }: { page: Page; children: ReactNode }) {
         )}
       </header>
 
-      <main className="screen" key={page}>
-        {children}
-      </main>
+      <main className="screen">{children}</main>
 
       <nav className="tabbar" aria-label="Main">
         {TABS.map(({ page: p, label, icon: Icon }) => (

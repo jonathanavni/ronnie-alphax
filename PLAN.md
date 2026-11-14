@@ -1,14 +1,24 @@
-# PLAN.md — Wayfinder (working title), a travel companion for older travellers
+# PLAN.md — North Star, a travel companion for older travellers
 
 > "I am revolutionizing senior travel by building an all-in-one, easy-to-use travel platform that organises every aspect of a trip while providing personalized accessibility recommendations, travel support, and family collaboration, with the ambition of empowering millions of seniors worldwide to travel confidently and independently." — Ronnie
 
-## Current State (2026-11-07)
+## Current State (2026-11-14)
 
-**Scaffolding done.** The app runs (`npm run dev`) as a phone-width web app. It has the design system for older users (big text, high contrast, big buttons, a text size setting), a bottom tab bar with labels, Back and Help on every screen, a working scripted chat (reply buttons, typing, read-aloud), and first versions of every screen with sample data. Unfinished screens show a yellow dashed **"To build"** box listing what's left.
+**Ready for directional feedback.** Every button in the prototype now does something, and the yellow "To build" boxes are hidden (`SHOW_TODO` in `src/components/ui.tsx` brings them back).
 
-**Live:** https://jonathanavni.github.io/ronnie-alphax/ (auto-deploys on push to `main`). Shared with Ronnie for her review.
+What a tester can click through:
+- **Plan a trip** with the concierge (chat), including "Show me another place".
+- **My trip:** help for right now at the top (assistant, translate, today), then the 5-day plan.
+- **In-trip assistant** (`#/assistant`): "Where is the nearest toilet?", "Where can I get a drink of water?", "I'm tired", "I'm lost", back to the hotel by taxi. Typing a question works too (keywords), and Speak is a pretend microphone.
+- **Translate a sign or menu** (`#/translate`): choose → pretend camera → English translation with a personal "Good to know" note. No real camera or translator.
+- **Help:** each option asks "Call Sarah?" first, then a pretend "Calling…" screen. "Take me to my hotel" shows the address in Portuguese for a taxi driver.
+- **Family:** On/Off switches with words. **Text size:** Normal / Large / Largest.
 
-**Next up:** collect Ronnie's improvement list, then Milestone 1 below.
+Checked at 375px, and at the largest text size on a 320px-wide phone: no sideways scrolling, no button under 50px.
+
+**Live:** https://jonathanavni.github.io/ronnie-alphax/ (auto-deploys on push to `main`).
+
+**Next up:** Ronnie reviews the wording and the story, then practice runs (Milestone 4). Still unbuilt: first-time "About me" questions (`Setup.tsx`), trip item details, the family member's view, a reminder banner.
 
 ## 1. Goal of the prototype
 
@@ -42,12 +52,15 @@ Sign up and login, payments, real booking, real maps/GPS, real AI, notifications
 ```
 Bottom tabs:  Home · Plan · My trip · Help            (+ Help button top-right on every screen)
 
-Home ─┬─ Today in Lisbon      → #/today    (in-trip assistance)
-      ├─ Plan a new trip      → #/plan     (concierge chat)
-      ├─ My trip to Lisbon    → #/trip     (day-by-day plan)
+Home ─┬─ Today in Lisbon      → #/today     (next stop + quick help buttons)
+      ├─ My trip to Lisbon    → #/trip      (help during the trip + day-by-day plan)
+      ├─ Plan a new trip      → #/plan      (concierge chat)
       ├─ Family               → #/family
-      └─ About me             → #/profile  → Text size (#/settings)
-Help ─── Call family · Real person · Take me to my hotel · Emergency 112
+      └─ About me             → #/profile   → Text size (#/settings)
+My trip / Today ─┬─ Ask your assistant       → #/assistant  (also #/assistant/toilet, /water, /tired, /lost)
+                 └─ Translate a sign or menu → #/translate  (also #/translate/sign, /menu)
+Help ─┬─ Call Sarah · Real person · Emergency 112 → #/call/sarah, /support, /emergency (confirm first)
+      └─ Take me to my hotel                      → #/driver (address in Portuguese)
 #/demo ─ presenter shortcuts to every flow (for Ronnie, not testers)
 ```
 
@@ -98,24 +111,25 @@ Each milestone ends with a click-through on a phone and `npm run build` passing.
 - [x] UX guidelines, feedback-session guide
 
 ### Milestone 1 — Planning flow complete
-- [ ] Pick the app name and the concierge's name (put both in `src/data/strings.ts`)
+- [ ] Pick the concierge's name (app name ✅ "North Star", in `src/data/strings.ts`)
 - [ ] Adjust the persona and trip in `src/data/sample.ts` to suit the people you'll test with
 - [ ] Build `Setup.tsx`: the first-time "About me" questions (Flow A)
-- [ ] Extend the `PLAN_TRIP` script: hotel details, "another place", "talk to a person"
+- [ ] Extend the `PLAN_TRIP` script: hotel details, "talk to a person" ("another place" ✅)
 - [ ] Trip item details: tap an item → details + "Ask about this"
 - [ ] Home: first-time vs returning (show Setup if no profile)
 
 ### Milestone 2 — In-trip help complete
-- [ ] In-trip chat scripts (tired / toilet / lost / change plan) + reply chips on Today
-- [ ] "Show the driver" full-screen address card
-- [ ] Help: confirmation screens for each option
+- [x] In-trip chat scripts (toilet / water / tired / lost / back to hotel) + buttons on Today and My trip. Not done: "change today's plan"
+- [x] Translate a sign or menu from a (pretend) photo
+- [x] "Show the driver" address card
+- [x] Help: confirmation screens for each option
 - [ ] Fake reminder banner ("Insulin in 15 minutes") triggered from `#/demo`
 
 ### Milestone 3 — Family + polish
-- [ ] Family: On/Off switches, invite, the family member's view mock
-- [ ] Mic button: fake "Listening…" state that fills in a sample sentence
+- [ ] Family: invite, the family member's view mock (On/Off switches ✅)
+- [x] Mic button: fake "Listening…" state that fills in a sample sentence
 - [ ] Run the screen checklist from `docs/ux-guidelines.md` on every screen, at the largest text size and at 320px wide
-- [ ] Remove all "To build" boxes; deploy (GitHub Pages or Vercel) so testers can open a link
+- [x] Hide all "To build" boxes; deployed on GitHub Pages
 
 ### Milestone 4 — Feedback
 - [ ] 1–2 practice runs (a family member), fix whatever confuses them
@@ -134,7 +148,7 @@ Each milestone ends with a click-through on a phone and `npm run build` passing.
 
 ## 7. Open questions (for Ronnie)
 
-- App name and concierge name / personality? (Keeping "Wayfinder" for now.)
+- Concierge name / personality? (App name decided: "North Star".)
 - Who will the testers be, and roughly how old? (Keeping Margaret for now; adjust after Ronnie's review.)
 - Does the school presentation need slides or a short video of the flows? (A screen recording of `#/demo` works well.)
 
@@ -154,3 +168,9 @@ Each milestone ends with a click-through on a phone and `npm run build` passing.
 - **2026-11-07 — Persona Margaret (74) → Lisbon**, the hills show off the accessibility advice. Easy to change in `src/data/sample.ts`. Kept, along with the "Wayfinder" placeholder name, until Ronnie's review.
 - **2026-11-07 — English only.** No Hebrew/RTL (Jonathan's call).
 - **2026-11-07 — Hosting: GitHub Pages** (repo `jonathanavni/ronnie-alphax`, public, because Pages on a free account needs a public repo). Auto-deploys on push to `main`, same workflow as the chess tutor.
+- **2026-11-14 — In-trip help lives under "My trip"** (and Today): an assistant chat plus photo translation. Separate script (`IN_TRIP`) from planning, so each chat has one job.
+- **2026-11-14 — Typed questions match keywords** ("bathroom" → the toilet answer). No match → "Sorry, did you mean…?" with the main choices. Still no real AI.
+- **2026-11-14 — Camera, microphone, calls and translation are pretend**, and the screen says so. Enough to learn whether people want the feature.
+- **2026-11-14 — "To build" boxes hidden, not deleted** (`SHOW_TODO`), and dead buttons removed, so testers never hit something that does nothing.
+- **2026-11-14 — Trip is now 12–16 May (4 nights), 5 days of plan**, so the chat summary and My trip tell the same story.
+- **2026-11-14 — App name: "North Star"** (was the placeholder "Wayfinder"). Set in `src/data/strings.ts`.

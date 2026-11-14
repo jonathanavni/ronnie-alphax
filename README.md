@@ -1,4 +1,4 @@
-# 🧭 Wayfinder — travel companion prototype
+# 🧭 North Star — travel companion prototype
 
 A school project by Ronnie: a prototype app that helps older travellers **plan trips around their personal needs** and **get help during the trip**, with an AI travel assistant and family support.
 

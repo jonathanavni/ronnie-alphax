@@ -1,4 +1,4 @@
-# CLAUDE.md — Wayfinder (Ronnie's AlphaX project)
+# CLAUDE.md — North Star (Ronnie's AlphaX project)
 
 ## Project
 
@@ -20,7 +20,7 @@ A **clickable prototype** of a travel companion app for older travellers (65+), 
 | Styling | Plain CSS in `src/styles.css`, design tokens as CSS variables, all sizes in `rem` |
 | Icons | `lucide-react` (always paired with a text label) |
 | Font | Atkinson Hyperlegible Next (bundled via @fontsource) |
-| Routing | Hash router `src/lib/router.ts` (`#/plan`, `#/trip` …), so every screen is a link |
+| Routing | Hash router `src/lib/router.ts` (`#/plan`, `#/trip` …), so every screen is a link. One optional extra word reaches the screen as `param` (`#/assistant/toilet`, `#/call/sarah`) |
 | Chat | Scripted conversations in `src/data/scripts.ts`, played by `src/lib/useScript.ts` |
 | Hosting | GitHub Pages (`.github/workflows/deploy.yml`) or Vercel. Static `dist/` |
 
@@ -30,16 +30,18 @@ A **clickable prototype** of a travel companion app for older travellers (65+), 
 src/
   data/types.ts       Traveller / Trip / Script types
   data/sample.ts      the persona (Margaret, 74) and her Lisbon trip
-  data/scripts.ts     concierge conversations (steps → messages, card, reply buttons)
+  data/scripts.ts     concierge conversations: PLAN_TRIP (planning) and IN_TRIP (help during the trip)
+  data/translate.ts   sample "photos" (a sign, a menu) and their translations
   data/strings.ts     app name + UI strings (one place, easy to review)
   lib/router.ts       hash router + list of pages
   lib/settings.ts     text size (normal / large / xlarge) in localStorage
   lib/speech.ts       read-aloud via the browser's speechSynthesis
-  lib/useScript.ts    plays a script: paced messages, replies, typed input → first reply
+  lib/useScript.ts    plays a script: paced messages, replies, typed input → topic keyword, else "sorry" step, else first reply
   components/Shell.tsx   top bar (Back / Help) + bottom tab bar
-  components/Chat.tsx    chat thread, reply buttons, composer, read-aloud
-  components/ui.tsx      ScreenTitle, ActionCard, Todo
-  screens/*.tsx       one file per screen (Home, Profile, Plan, Trip, Today, Help, Family, Settings, Demo)
+  components/Chat.tsx    chat thread, reply buttons, composer, pretend microphone
+  components/ui.tsx      ScreenTitle, ActionCard, ReadAloud, Todo (hidden: SHOW_TODO)
+  screens/*.tsx       one file per screen (Home, Profile, Plan, Trip, Today, Assistant, Translate,
+                      Help, Call, Driver, Family, Settings, Demo)
 docs/ux-guidelines.md     design rules from research + per-screen checklist
 docs/feedback-sessions.md how to run test sessions with older adults
 docs/feedback-log.md      notes from each session
@@ -48,7 +50,8 @@ docs/feedback-log.md      notes from each session
 ## How to…
 
 - **Add a screen:** create `src/screens/X.tsx`, add its name to `PAGES` in `router.ts` and to `SCREENS` in `App.tsx`, and add it to the list in `screens/Demo.tsx`.
-- **Add a conversation:** add a `Script` in `src/data/scripts.ts`. Keep each message to 3 lines or fewer, one question at a time, 2–4 replies. Typed input always follows the first reply.
+- **Add a conversation:** add a `Script` in `src/data/scripts.ts`. Keep each message to 3 lines or fewer, one question at a time, 2–4 replies. A reply has `next` (another step) or `go` (open a screen). For typed input, add `topics` (keywords → step) and a `fallback` step; without them typed input follows the first reply.
+- **Fake, don't build:** the camera, the microphone, calls and the translator are all pretend. Each says so on screen or in the "Prototype" banner.
 - **Change the story:** edit `src/data/sample.ts`.
 
 ## Commands
